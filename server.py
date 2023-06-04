@@ -91,8 +91,7 @@ def show_results():
     values = json.dumps(values)
     colors = json.dumps(colors)
 
-
-    return render_template("results.html", labels = labels, values = values, colors = colors, \
+    return render_template("results.html", selected_value = value, selected_demo = demo_group, labels = labels, values = values, colors = colors, \
                             title = legend["values"][value]["title"], description = legend["values"][value]["description"])
     
 

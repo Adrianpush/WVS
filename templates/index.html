@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content%}
-<div class="row my-5 py-5 px-5" style="height: 50vh;">
+<div class="row mt-5 py-5 px-5">
     <div class="col">
         <h4 >
             This website is dedicated to exploring the statistical data about Romania collected by World Values Survey in their Wave 7 research (2017 - 2022).
@@ -9,6 +9,15 @@
             This website does not collect or store any personal information.
         </h6>
 
+        
+
     </div>
+</div>
+<hr>
+<div class="row my-5">
+    <div class="col">
+        {% include "form.html" %}
+    </div>
+
 </div>
 {% endblock %}

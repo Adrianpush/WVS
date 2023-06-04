@@ -1,5 +1,7 @@
 {% extends "base.html" %} 
 {% block content%}
+{% include "form.html" %}
+<hr>
 <div class="row my-5">
   <div class="col-12">
     <h3>{{title}}</h3>
@@ -14,11 +16,13 @@
 </div>
 </div>
 <div class="row mt-3 mb-5">
-  <div class="col-12 d-flex justify-content-center">
-  <canvas id="lineChart" style="width: 75%;"></canvas>
+  <div class="col-12">
+  <canvas id="lineChart" style="max-width: 1000px;"></canvas>
 </div>
 </div>
 <script>
+  document.getElementById({{selected_value | tojson}}).checked = true;
+  document.getElementById({{selected_demo | tojson}}).checked = true;
   var xValues = {{labels | safe}};
   var yValues = {{ values | safe}};
   var barColors = {{colors | safe}};
