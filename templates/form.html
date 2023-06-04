@@ -1,0 +1,154 @@
+
+
+<form name="myForm" action="/results" onsubmit="return validateForm()" method="POST">
+  <fieldset>
+    <div class="row mt-3">
+    <h5>Please select a social value:</h5>
+  </div>
+    <div
+      class="btn-group"
+      role="group"
+      aria-label="Basic radio toggle button group"
+    >
+      <input
+        type="radio"
+        class="btn-check"
+        id="religious_importance"
+        name="social_value"
+        value="religious_importance"
+        checked
+      />
+      <label class="btn btn-outline-primary" for="religious_importance"
+        >Importance of religion</label
+      >
+
+      <input
+        type="radio"
+        class="btn-check"
+        id="work_importance"
+        name="social_value"
+        value="work_importance"
+      />
+      <label class="btn btn-outline-primary" for="work_importance"
+        >Importance of work</label
+      >
+
+      <input
+        type="radio"
+        class="btn-check"
+        id="family_importance"
+        name="social_value"
+        value="family_importance"
+      />
+      <label class="btn btn-outline-primary" for="family_importance"
+        >Importance of family</label
+      >
+
+      <input
+        type="radio"
+        class="btn-check"
+        id="gender_equality"
+        name="social_value"
+        value="gender_equality"
+      />
+      <label class="btn btn-outline-primary" for="gender_equality"
+        >Importance of gender equality</label
+      >
+
+      <input
+        type="radio"
+        class="btn-check"
+        id="rel_n_ethnic_tolerance"
+        name="social_value"
+        value="rel_n_ethnic_tolerance"
+      />
+      <label class="btn btn-outline-primary" for="rel_n_ethnic_tolerance"
+        >Ethnic and religious tolerance</label
+      >
+
+      <input
+        type="radio"
+        class="btn-check"
+        id="sex_minority_tolerance"
+        name="social_value"
+        value="sex_minority_tolerance"
+      />
+      <label class="btn btn-outline-primary" for="sex_minority_tolerance"
+        >Tolerance of sexual minorities</label
+      >
+    </div>
+  </fieldset>
+  <fieldset>
+    <div class="row mt-3">
+    <h5>Please select a demographic criteria:</h5>
+  </div>
+    <div
+      class="btn-group"
+      role="group"
+      aria-label="Basic radio toggle button group"
+    >
+      <input
+        type="radio"
+        class="btn-check"
+        id="age_group"
+        name="demographic"
+        value="age_group"
+        checked
+      />
+      <label class="btn btn-outline-primary" for="age_group">Age Group</label>
+
+      <input
+        type="radio"
+        class="btn-check"
+        id="gender"
+        name="demographic"
+        value="gender"
+      />
+      <label class="btn btn-outline-primary"  for="gender">Gender</label>
+
+      <input
+        type="radio"
+        class="btn-check"
+        id="education"
+        name="demographic"
+        value="education"
+      />
+      <label class="btn btn-outline-primary"  for="education">Education</label>
+
+      <input
+        type="radio"
+        class="btn-check"
+        id="sttelement_size"
+        name="demographic"
+        value="settlement_size"
+      />
+      <label class="btn btn-outline-primary"  for="sttelement_size">Settlement Size</label>
+
+      <input
+        type="radio"
+        class="btn-check"
+        id="income"
+        name="demographic"
+        value="income"
+      />
+      <label class="btn btn-outline-primary"  for="income">Income</label>
+    </div>
+  </fieldset>
+  <div>
+    <div class="row mt-3">
+      <div class="col">
+    <input class="btn btn-primary" type="submit" value="Submit">
+  </div>
+  </div>
+  </div>
+</form>
+<script>
+  function validateForm() {
+    let s_value = document.forms["myForm"]["social_value"].value;
+    let d_value = document.forms["myForm"]["demographic"].value;
+    if (s_value == "" || d_value == "") {
+      alert("Please select both values");
+      return false;
+    }
+  }
+</script>

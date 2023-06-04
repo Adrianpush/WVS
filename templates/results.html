@@ -1,0 +1,57 @@
+{% extends "base.html" %} 
+{% block content%}
+<div class="row my-5">
+  <div class="col-12">
+    <h3>{{title}}</h3>
+  </div>
+  <div class="row">
+  <div class="col-12">
+    <h5>{{description}}</h5>
+  </div>
+</div>
+<div class="col-12">
+  <h6>The score is calculated on a scale of 0 to 10.</h6>
+</div>
+</div>
+<div class="row mt-3 mb-5">
+  <div class="col-12 d-flex justify-content-center">
+  <canvas id="lineChart" style="width: 75%;"></canvas>
+</div>
+</div>
+<script>
+  var xValues = {{labels | safe}};
+  var yValues = {{ values | safe}};
+  var barColors = {{colors | safe}};
+  var title = {{title | tojson}};
+
+  new Chart("lineChart", {
+    type: "bar",
+    data: {
+      labels: xValues,
+      datasets: [
+        {
+          backgroundColor: barColors,
+          data: yValues,
+        },
+      ],
+    },
+    options: {
+      legend: { display: false },
+      title: {
+        display: true,
+        text: title,
+      },
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true,
+              max: 10,
+            },
+          },
+        ],
+      },
+    },
+  });
+</script>
+{% endblock %}
