@@ -1,16 +1,77 @@
-import pandas
+import pandas as pd
+
+country_filename = {
+    "romania": 'romania_2018.csv'
+}
+
+cols_for = {
+    "work_score": ["Q5","Q41"],
+    "fam_score": ["Q1", "Q58", "Q185"],
+    "religion_score": ["Q6", "Q64", "Q160", "Q171"],
+    "gender_equality": ["Q28", "Q29", "Q30", "Q31"],
+    "ethnic_rel_tolerance": ["Q19", "Q21", "Q23", "Q34", "Q121", "Q170"],
+    "sex_minority_tolerance": ["Q22", "Q36", "Q182" ],
+    "age_group": ["Q262"],
+    "gender": ["Q260"],
+    "settlement_size": ["G_TOWNSIZE"],
+    "education": ["Q275"],
+    "income": ["Q288R"],
+
+}
 
 
 class Dbquery:
-    def __init__(self) -> None:
+
+    def __init__(self, country_name) -> None:
+
+        self.country_name = country_name
         self.df = None
 
-    def load_file(self, file_name):
-        with open("data/romania_2018.csv", "r") as file:
+    
+    def _generate_df(self, required_cols: list):
 
-            self.df = pandas.read_csv(file, sep=";")
+        with open(f"data/{country_filename[self.country_name]}", "r") as file:
+
+            self.df = pd.read_csv(file, sep=";", usecols=required_cols)
 
 
+    def _compute_score(self, value, group):
+
+        if value == "work_score":
+            self.df["work_score"] = self.df.apply(
+                lambda row: self._compute_work_score(row), axis=1
+        )
+        elif value == "fam_score":
+            self.df["fam_score"] = self.df.apply(
+                lambda row: self._compute_family_score(row), axis=1)
+        elif value == "religion_score":
+            self.df["religion_score"] = self.df.apply(
+                lambda row: self._compute_religion_score(row), axis=1)
+        elif value == "gender_equality":
+            self.df["gender_equality"] = self.df.apply(
+                lambda row: self._compute_gender_equality_score(row), axis=1)    
+        elif value == "ethnic_rel_tolerance":
+            self.df["ethnic_rel_tolerance"] = self.df.apply(
+                lambda row: self._compute_tolerance_ethnic_religious(row), axis=1)           
+        elif value == "sex_minority_tolerance":
+            self.df["sex_minority_tolerance"] = self.df.apply(
+                lambda row: self._compute_tolerance_sex_minorities(row), axis=1)     
+
+        if group == "age_group":
+            self.df["age_group"] = self.df.apply(
+                lambda row: self._compute_age_group(row), axis=1)    
+        elif group == "settlement_size":
+            self.df["settlement_size"] = self.df.apply(
+                lambda row: self._compute_settlement_size(row), axis=1)   
+        elif group == "education":
+            self.df["education"] = self.df.apply(
+                lambda row: self._compute_education_level(row), axis=1)   
+        elif group == "gender":
+            self.df.rename(columns = {cols_for[group][0]: group}, inplace = True)
+        elif group == "income":
+            self.df.rename(columns = {cols_for[group][0]: group}, inplace = True)
+
+#VALUES SCORES#
     def _compute_religion_score(self, row):
         religion_score = 0
         valid_answers = 0
@@ -96,7 +157,7 @@ class Dbquery:
         if row["Q5"] > 0:
             valid_answers += 1
 
-        if row["Q1"] == 1:
+        if row["Q5"] == 1:
             work_score += 10
         elif row["Q5"] == 2:
             work_score += 7
@@ -253,6 +314,8 @@ class Dbquery:
         if valid_answers:
             return tolerance_score / valid_answers
 
+#DEMOGRAPHIC GROUPS#
+
     def _compute_age_group(self, row):
         if row["Q262"] > 84:
             return "84+"
@@ -284,35 +347,6 @@ class Dbquery:
         elif row["Q275"] in range(5,10):
             return "Higher Education - ISCED 6 and above"
 
-    def calculate_scores(self):
-        self.df["religion_score"] = self.df.apply(
-            lambda row: self._compute_religion_score(row), axis=1
-        )
-        self.df["fam_score"] = self.df.apply(
-            lambda row: self._compute_family_score(row), axis=1
-        )
-        self.df["work_score"] = self.df.apply(
-            lambda row: self._compute_work_score(row), axis=1
-        )
-        self.df["gender_equality"] = self.df.apply(
-            lambda row: self._compute_gender_equality_score(row), axis=1
-        )
-        self.df["ethnic_rel_tolerance"] = self.df.apply(
-            lambda row: self._compute_tolerance_ethnic_religious(row), axis=1
-        )
-        self.df["sex_minority_tolerance"] = self.df.apply(
-            lambda row: self._compute_tolerance_sex_minorities(row), axis=1
-        )
-        self.df["age_group"] = self.df.apply(
-            lambda row: self._compute_age_group(row), axis=1
-        )
-        self.df["settlement_size"] = self.df.apply(
-            lambda row: self._compute_settlement_size(row), axis=1
-        )
-        self.df["education"] = self.df.apply(
-            lambda row: self._compute_education_level(row), axis=1
-        )
-
     def _format_dict(self, dict, group):
         
         new_dict = {}
@@ -335,7 +369,7 @@ class Dbquery:
                 elif key == "84+":
                     new_dict["Ages over 84"] = format(dict[key], '.2f')
 
-        elif group == "Q260":
+        elif group == "gender":
 
             keys = ["Men", "Women"]
             new_dict = {key: key for key in keys}
@@ -360,7 +394,7 @@ class Dbquery:
             for key in dict:
                 new_dict[key] = format(dict[key], '.2f')
 
-        elif group == "Q288R":
+        elif group == "income":
                         
             keys = ["Low Income", "Medium Income", "High Income"]
             new_dict = {key: key for key in keys}
@@ -373,10 +407,14 @@ class Dbquery:
                 elif key == 3:
                     new_dict["High Income"] = format(dict[key], '.2f')
 
-        return new_dict
+        return {self.country_name: new_dict}
+    
     
     def get_value_by_group(self, value, group):
-
+        
+        required_columns = cols_for[value] + cols_for[group]
+        self._generate_df(required_columns)
+        self._compute_score(value, group)
         data = self.df.groupby([group])[value].mean()
         data_dict = self._format_dict(data.to_dict(), group)   
 

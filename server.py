@@ -1,10 +1,8 @@
-from flask import Flask, render_template, request, json
+from flask import Flask, render_template, request, jsonify
 from db_manager import Dbquery
 
+db = Dbquery("romania")
 
-manager = Dbquery()
-manager.load_file("romania_2018.csv")
-manager.calculate_scores()
 
 values_dict = {
     "work_importance": "work_score",
@@ -15,14 +13,7 @@ values_dict = {
     "sex_minority_tolerance": "sex_minority_tolerance"
 }
 
-demographic_dict = {
-    "age_group": "age_group",
-    "gender": "Q260",
-    "settlement_size": "settlement_size",
-    "education": "education",
-    "income": "Q288R"
 
-}
 
 colors_list = ["#f48fb1", "#7986cb",  "#4dd0e1",  "#a5d6a7", "#e6ee9c", "#ffab91"]
 
@@ -60,6 +51,7 @@ legend = {
 }
 
 
+
 app = Flask(__name__)
 
 
@@ -69,32 +61,29 @@ def show_index():
 
 @app.route("/results", methods = ['POST', 'GET'])
 def show_results():
-
-
-        
+   
     selected = request.form
+
     value = selected["social_value"]
     demo_group = selected["demographic"]
+    print(value, demo_group)
 
-    data = manager.get_value_by_group(values_dict[value], demographic_dict[demo_group])
+    db = Dbquery("romania")
+    data = db.get_value_by_group(values_dict[value], demo_group)
 
     labels = []
     values = []
     colors = []
 
-    for i,key in enumerate(data):
+    for i,key in enumerate(data["romania"]):
         labels.append(key)
-        values.append(data[key])
+        values.append(data["romania"][key])
         colors.append(colors_list[i])
-
-    labels = json.dumps(labels)
-    values = json.dumps(values)
-    colors = json.dumps(colors)
-
+    
     return render_template("results.html", selected_value = value, selected_demo = demo_group, labels = labels, values = values, colors = colors, \
                             title = legend["values"][value]["title"], description = legend["values"][value]["description"])
     
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=False)

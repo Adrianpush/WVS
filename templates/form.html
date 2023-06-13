@@ -1,15 +1,13 @@
-
 <form name="myForm" action="/results" onsubmit="return validateForm()" method="POST">
   <fieldset>
     <div class="row mt-3">
     <h5>Please select a social value:</h5>
   </div>
     <div
-      class="btn-group row px-3"
+      class="btn-group"
       role="group"
       aria-label="Basic radio toggle button group"
     >
-
       <input
         type="radio"
         class="btn-check"
@@ -18,7 +16,7 @@
         value="religious_importance"
         checked
       />
-      <label class="col-sm-12 col-md-6 col-lg-2 btn btn-outline-primary" for="religious_importance"
+      <label class="btn btn-outline-primary" for="religious_importance"
         >Importance of religion</label
       >
 
@@ -29,7 +27,7 @@
         name="social_value"
         value="work_importance"
       />
-      <label class="col-sm-12 col-md-6 col-lg-2 btn btn-outline-primary" for="work_importance"
+      <label class="btn btn-outline-primary" for="work_importance"
         >Importance of work</label
       >
 
@@ -40,7 +38,7 @@
         name="social_value"
         value="family_importance"
       />
-      <label class="col-sm-12 col-md-6 col-lg-2 btn btn-outline-primary" for="family_importance"
+      <label class="btn btn-outline-primary" for="family_importance"
         >Importance of family</label
       >
 
@@ -51,7 +49,7 @@
         name="social_value"
         value="gender_equality"
       />
-      <label class="col-sm-12 col-md-6 col-lg-2 btn btn-outline-primary" for="gender_equality"
+      <label class="btn btn-outline-primary" for="gender_equality"
         >Importance of gender equality</label
       >
 
@@ -62,7 +60,7 @@
         name="social_value"
         value="rel_n_ethnic_tolerance"
       />
-      <label class="col-sm-12 col-md-6 col-lg-2 btn btn-outline-primary" for="rel_n_ethnic_tolerance"
+      <label class="btn btn-outline-primary" for="rel_n_ethnic_tolerance"
         >Ethnic and religious tolerance</label
       >
 
@@ -73,18 +71,17 @@
         name="social_value"
         value="sex_minority_tolerance"
       />
-      <label class="col-sm-12 col-md-6 col-lg-2 btn btn-outline-primary" for="sex_minority_tolerance"
+      <label class="btn btn-outline-primary" for="sex_minority_tolerance"
         >Tolerance of sexual minorities</label
       >
-
-  </div>
+    </div>
   </fieldset>
   <fieldset>
     <div class="row mt-3">
     <h5>Please select a demographic criteria:</h5>
   </div>
     <div
-      class="btn-group row px-3"
+      class="btn-group"
       role="group"
       aria-label="Basic radio toggle button group"
     >
@@ -96,7 +93,7 @@
         value="age_group"
         checked
       />
-      <label class="col-sm-12 col-md-6 col-lg-2 btn btn-outline-primary" for="age_group">Age Group</label>
+      <label class="btn btn-outline-primary" for="age_group">Age Group</label>
 
       <input
         type="radio"
@@ -105,7 +102,7 @@
         name="demographic"
         value="gender"
       />
-      <label class="col-sm-12 col-md-6 col-lg-2 btn btn-outline-primary"  for="gender">Gender</label>
+      <label class="btn btn-outline-primary"  for="gender">Gender</label>
 
       <input
         type="radio"
@@ -114,16 +111,16 @@
         name="demographic"
         value="education"
       />
-      <label class="col-sm-12 col-md-6 col-lg-2 btn btn-outline-primary"  for="education">Education</label>
+      <label class="btn btn-outline-primary"  for="education">Education</label>
 
       <input
         type="radio"
         class="btn-check"
-        id="settlement_size"
+        id="sttelement_size"
         name="demographic"
         value="settlement_size"
       />
-      <label class="col-sm-12 col-md-6 col-lg-2 btn btn-outline-primary"  for="settlement_size">Settlement Size</label>
+      <label class="btn btn-outline-primary"  for="sttelement_size">Settlement Size</label>
 
       <input
         type="radio"
@@ -132,18 +129,19 @@
         name="demographic"
         value="income"
       />
-      <label class="col-sm-12 col-md-6 col-lg-2 btn btn-outline-primary"  for="income">Income</label>
+      <label class="btn btn-outline-primary"  for="income">Income</label>
     </div>
   </fieldset>
   <div>
-    <div class="row mt-3 px-3">
+    <div class="row mt-3">
       <div class="col">
-    <input class="btn btn-info" type="submit" value="Get Data">
+    <input class="btn btn-primary" type="submit" value="Submit">
   </div>
   </div>
   </div>
 </form>
 <script>
+
   function validateForm() {
     let s_value = document.forms["myForm"]["social_value"].value;
     let d_value = document.forms["myForm"]["demographic"].value;
