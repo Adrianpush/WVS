@@ -1,27 +1,31 @@
-{% extends "base.html" %}
-{% block content%}
-{% include "form.html" %}
+{% extends "base.html" %} {% block content%} {% include "form.html" %}
 <div class="row my-5">
   <div class="col-12">
     <h3>{{title}}</h3>
   </div>
   <div class="row">
-  <div class="col-12">
-    <h5>{{description}}</h5>
+    <div class="col-12">
+      <h5>{{description}}</h5>
+    </div>
   </div>
-</div>
-<div class="col-12">
-  <h6>The score is calculated on a scale of 0 to 10.</h6>
-</div>
+  <div class="col-12">
+    <h6>
+      The score represents the mean value and is calculated on a scale of 0 to
+      10.
+    </h6>
+  </div>
 </div>
 <div class="row mt-3 mb-5">
   <div class="col-12 d-flex justify-content-center">
-  <canvas id="lineChart" style="width: 75%;"></canvas>
-</div>
+    <canvas id="lineChart" style="width: 75%"></canvas>
+  </div>
 </div>
 <script>
-  document.getElementById({{selected_value | tojson}}).checked = true;
-  document.getElementById({{selected_demo | tojson}}).checked = true;
+    var countries_dropdown = document.getElementById("countries_dropdown");
+    countries_dropdown.remove(0)
+    document.getElementById({{ selected_country | tojson}}).selected = true;
+    document.getElementById({{selected_value | tojson}}).checked = true;
+    document.getElementById({{selected_demo | tojson}}).checked = true;
 </script>
 <script>
 
@@ -59,6 +63,5 @@
       },
     },
   });
-
 </script>
 {% endblock %}
