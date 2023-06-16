@@ -420,6 +420,5 @@ class Dbquery:
         self._compute_score(value, group)
         data = self.df.groupby([group])[value].mean()
         data_dict = self._format_dict(data.to_dict(), group)
-        print(data_dict)
 
         return data_dict
