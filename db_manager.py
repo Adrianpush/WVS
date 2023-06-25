@@ -1,7 +1,11 @@
 import pandas as pd
 
-country_filename = {"romania": "romania.csv", "germany": "germany.csv", "great britain": "great_britain.csv", "greece": "greece.csv",
-                    "russian federation": "russia.csv", "ukraine": "ukraine.csv"}
+country_filename = {"romania": "romania.csv", "germany": "germany.csv",
+                     "great_britain": "great_britain.csv", "greece": "greece.csv",
+                    "russian_federation": "russia.csv", "ukraine": "ukraine.csv", "argentina" : "argentina.csv",
+                    "china" : "china.csv", "japan" : "japan.csv",
+                    "south_korea": "south_korea.csv", "turkey" : "turkey.csv",
+                    "united_states" : "united_states.csv"}
 
 cols_for = {
     "work_score": ["Q5", "Q41"],
@@ -361,57 +365,47 @@ class Dbquery:
             new_dict = {key: key for key in keys}
             for key in dict:
                 if key == "18 - 28":
-                    new_dict["Ages between 18 and 28"] = format(dict[key], ".2f")
+                    new_dict["Ages between 18 and 28"] = dict[key]
                 elif key == "28 - 40":
-                    new_dict["Ages between 28 and 40"] = format(dict[key], ".2f")
+                    new_dict["Ages between 28 and 40"] = dict[key]
                 elif key == "40 - 52":
-                    new_dict["Ages between 40 and 52"] = format(dict[key], ".2f")
+                    new_dict["Ages between 40 and 52"] = dict[key]
                 elif key == "52 - 64":
-                    new_dict["Ages between 52 and 64"] = format(dict[key], ".2f")
+                    new_dict["Ages between 52 and 64"] = dict[key]
                 elif key == "64 - 84":
-                    new_dict["Ages between 64 and 84"] = format(dict[key], ".2f")
+                    new_dict["Ages between 64 and 84"] = dict[key]
                 elif key == "84+":
-                    new_dict["Ages over 84"] = format(dict[key], ".2f")
+                    new_dict["Ages over 84"] = dict[key]
 
         elif group == "gender":
             keys = ["Men", "Women"]
-            new_dict = {key: key for key in keys}
+            new_dict = {}
             for key in dict:
                 if key == 1:
-                    new_dict["Men"] = format(dict[key], ".2f")
+                    new_dict["Men"] = dict[key]
                 elif key == 2:
-                    new_dict["Women"] = format(dict[key], ".2f")
+                    new_dict["Women"] = dict[key]
 
         elif group == "education":
-            keys = [
-                "Base Education - Up to ISCED 2",
-                "Medium Education - Up to ISCED 4",
-                "Higher Education - ISCED 6 and above",
-            ]
-            new_dict = {key: key for key in keys}
-
-            for k in dict:
-                new_dict[k] = format(dict[k], ".2f")
+            new_dict = dict
 
         elif group == "settlement_size":
-            keys = ["Small Settlement", "Medium Settlement", "Large Settlement"]
-            new_dict = {key: key for key in keys}
-            for key in dict:
-                new_dict[key] = format(dict[key], ".2f")
+            new_dict = dict
+
 
         elif group == "income":
             keys = ["Low Income", "Medium Income", "High Income"]
-            new_dict = {key: key for key in keys}
+            new_dict = {}
 
             for key in dict:
                 if key == 1:
-                    new_dict["Low Income"] = format(dict[key], ".2f")
+                    new_dict["Low Income"] = dict[key]
                 elif key == 2:
-                    new_dict["Medium Income"] = format(dict[key], ".2f")
+                    new_dict["Medium Income"] = dict[key]
                 elif key == 3:
-                    new_dict["High Income"] = format(dict[key], ".2f")
+                    new_dict["High Income"] = dict[key]
 
-        return {self.country_name: new_dict}
+        return new_dict
 
     # CALLABLE METHODS
     def get_value_by_group(self, value, group):
@@ -419,6 +413,19 @@ class Dbquery:
         self._generate_df(required_columns)
         self._compute_score(value, group)
         data = self.df.groupby([group])[value].mean()
-        data_dict = self._format_dict(data.to_dict(), group)
+        print(data)
+        formatted_data = self._format_dict(data.to_dict(), group=group)
 
-        return data_dict
+        return formatted_data
+    
+    def get_country_value(self, value):
+
+        required_columns = cols_for[value]
+
+        self._generate_df(required_cols=required_columns)
+        self._compute_score(value=value, group=None)
+        data = self.df[value].mean()
+        
+        return data
+
+

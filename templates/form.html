@@ -1,45 +1,27 @@
-<form
-  name="myForm"
-  action="/results"
-  onsubmit="return validateForm()"
-  method="POST"
->
-<div class="alert alert-danger" id="alert" role="alert" style="display: none;">
-  Please select all values.
-</div>
+<form name="myForm" class="justify-content-center" action="/results" onsubmit="return validateForm()" method="POST">
+  <div class="alert alert-danger" id="alert" role="alert" style="display: none;">
+    Please select all values.
+  </div>
   <fieldset>
-    <select
-    id ="countries_dropdown"
-      class="form-select"
-      name="countries"
-      aria-label="Select a country:"
-    >
-      <option id="default-country" name="country" value="default" selected>Select a country:</option>
-      {% for country in populate_form["countries"] %}
-      <option id="{{ country }}" name="country" value="{{country}}">
-        {{country | title}}
-      </option>
-      {% endfor %}
-    </select>
+    <div class="row" style="width: 95%;">
+      <select id="countries_dropdown" class="form-select" name="countries" aria-label="Select a country:">
+        <option id="default-country" name="country" value="default" selected>Select a country:</option>
+        {% for country in populate_form["countries"] %}
+        <option class="col-sm-12" id="{{ country }}" name="country" value="{{country}}">
+          {{populate_form["countries"][country] | title}}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
   </fieldset>
   <fieldset>
     <div class="row mt-3">
       <h5>Please select a social value:</h5>
     </div>
-    <div
-      class="btn-group"
-      role="group"
-      aria-label="Basic radio toggle button group"
-    >
+    <div class="btn-group row" style="width: 100%;" role="group" aria-label="Basic radio toggle button group">
       {% for key, val in populate_form["values"].items() %}
-      <input
-        type="radio"
-        class="btn-check"
-        id="{{ key }}"
-        name="social_value"
-        value="{{ key }}"
-      />
-      <label class="btn btn-outline-primary" for="{{ key }}">{{ val }}</label>
+      <input type="radio" class="btn-check" id="{{ key }}" name="social_value" value="{{ key }}" />
+      <label class="btn btn-outline-primary rounded col-sm-12 col-md-4 col-lg-2"  for="{{ key }}">{{ val }}</label>
       {% endfor %}
     </div>
   </fieldset>
@@ -48,20 +30,12 @@
     <div class="row mt-3">
       <h5>Please select a demographic criteria:</h5>
     </div>
-    <div
-      class="btn-group"
-      role="group"
-      aria-label="Basic radio toggle button group"
-    >
-      {% for key, val in populate_form["demos"].items() %}
-      <input
-        type="radio"
-        class="btn-check"
-        id="{{key}}"
-        name="demographic"
-        value="{{key}}"
-      />
-      <label class="btn btn-outline-primary" for="{{key}}">{{val}}</label>
+    <div class="btn-group row" style="width: 100%;" role="group" aria-label="Basic radio toggle button group">
+      {% for key, val in populate_form["demo_group"].items() %}
+
+      <input type="radio" class="btn-check " id="{{key}}" name="demographic" value="{{key}}" />
+      <label class="btn btn-outline-primary rounded col-sm-12 col-md-4 col-lg-2" for="{{key}}">{{val}}</label>
+
       {% endfor %}
     </div>
   </fieldset>

@@ -2,7 +2,21 @@ from flask import Flask, render_template, request, jsonify
 from db_manager import Dbquery
 
 populate_form = {
-    "countries": ["romania", "germany", "great britain", "greece", "russian federation", "ukraine"],
+    "countries": {
+        "argentina" : "argentina",
+        "china" : "china",
+        "germany" : "germany",
+        "great_britain" : "great britain",
+        "greece" : "greece",
+        "japan" : "japan",
+        "south_korea" : "south korea",
+        "turkey" : "turkey",
+        "ukraine" : "ukraine",
+        "united_states" : "united states",
+        "romania": "romania",
+        "russian_federation" : "russian federation",
+        
+    },
     "values": {
         "work_score": "Importance of work",
         "fam_score": "Importance of family",
@@ -11,7 +25,7 @@ populate_form = {
         "ethnic_rel_tolerance": "Ethnic and religious tolerance",
         "sex_minority_tolerance": "Tolerance of sexual minorities",
     },
-    "demos": {
+    "demo_group": {
         "age_group": "Age Group",
         "gender": "Gender",
         "education": "Education",
@@ -55,6 +69,69 @@ legend = {
 app = Flask(__name__)
 
 
+@app.route("/api/", methods=["GET"])
+def get_country_info():
+    args = request.args
+
+    if request.method == "GET":
+        if args.keys() >= {"country", "social_value", "demo_group"}:
+            db = Dbquery(args["country"])
+            data = db.get_value_by_group(
+                value=args["social_value"], group=args["demo_group"]
+            )
+            formatted_data = {
+                "country_name": populate_form["countries"][args["country"]],
+                "values": [
+                    {
+                        "value_name": args["social_value"],
+                        "value_title": legend["values"][args["social_value"]]["title"],
+                        "value_description": legend["values"][args["social_value"]]["description"],
+                        "data": data
+                    }
+                ], 
+            }
+
+            return formatted_data
+
+        elif args.keys() >= {"country", "social_value"}:
+            db = Dbquery(args["country"])
+            data = db.get_country_value(args["social_value"])
+            formatted_data = {
+                "country_name": populate_form["countries"][args["country"]],
+                "values": [
+                    {
+                        "value_name": args["social_value"],
+                        "value_title": legend["values"][args["social_value"]]["title"],
+                        "value_description": legend["values"][args["social_value"]]["description"],
+                        "data": [{"country_average": data}]
+                    }
+                ], 
+            }
+
+            return formatted_data
+
+        elif args.keys() >= {"country"}:
+            db = Dbquery(args["country"])
+
+
+            formatted_data = {
+                "country_name": populate_form["countries"][args["country"]],
+                "values": [
+                    {
+                        "value_name": social_value,
+                        "value_title": legend["values"][social_value]["title"],
+                        "value_description": legend["values"][social_value]["description"],
+                        "data": [{"country_average": db.get_country_value(social_value)}]
+                    } for social_value in populate_form["values"].keys()
+                ], 
+            }
+            return formatted_data
+        else:
+            print("Invalid Paramters")
+    print(data)
+    return jsonify(data)
+
+
 @app.route("/", methods=["GET"])
 def show_index():
     return render_template("index.html", populate_form=populate_form)
@@ -69,16 +146,18 @@ def show_results():
     demo_group = selected["demographic"]
 
     db = Dbquery(country)
+    
     data = db.get_value_by_group(value, demo_group)
 
     labels = []
     values = []
     colors = []
 
-    for i, key in enumerate(data[country]):
+    for index,( key, val) in enumerate(data.items()):
         labels.append(key)
-        values.append(data[country][key])
-        colors.append(colors_list[i])
+        values.append(val)
+        colors.append(colors_list[index])
+      
 
     return render_template(
         "results.html",
