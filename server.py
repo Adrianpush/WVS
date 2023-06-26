@@ -91,7 +91,7 @@ def get_country_info():
                 ], 
             }
 
-            return formatted_data
+            return jsonify(formatted_data)
 
         elif args.keys() >= {"country", "social_value"}:
             db = Dbquery(args["country"])
@@ -108,7 +108,7 @@ def get_country_info():
                 ], 
             }
 
-            return formatted_data
+            return jsonify(formatted_data)
 
         elif args.keys() >= {"country"}:
             db = Dbquery(args["country"])
@@ -125,7 +125,8 @@ def get_country_info():
                     } for social_value in populate_form["values"].keys()
                 ], 
             }
-            return formatted_data
+            return jsonify(formatted_data)
+        
         else:
             print("Invalid Paramters")
     print(data)
